@@ -121,7 +121,7 @@ const loginRules = {
  * 刷新验证码
  */
 function refreshCaptcha() {
-  captchaUrl.value = `/api/captcha?t=${new Date().getTime()}`
+  captchaUrl.value = `/api/captcha/image?t=${new Date().getTime()}`
 }
 
 /**

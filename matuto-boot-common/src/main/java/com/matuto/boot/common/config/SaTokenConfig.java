@@ -21,13 +21,15 @@ public class SaTokenConfig implements WebMvcConfigurer {
      */
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-        // 注册Sa-Token拦截器，校验规则为：除了登录接口外，其他接口都需要登录认证
-        registry.addInterceptor(new SaInterceptor(handle -> {
-            SaRouter.match("/**")
-                    .notMatch("/auth/login")
-                    .notMatch("/auth/captcha")
-                    .check(r -> StpUtil.checkLogin());
-        })).addPathPatterns("/**");
+//        // 注册Sa-Token拦截器，校验规则为：除了登录接口外，其他接口都需要登录认证
+//        registry.addInterceptor(new SaInterceptor(handle -> {
+//            SaRouter.match("/api/**")
+//                    .notMatch("/api/auth/login")
+//                    .notMatch("/api/captcha/image")
+//                    .check(r -> StpUtil.checkLogin());
+//        })).addPathPatterns("/api/**");
+        // 注册 Sa-Token 拦截器，打开注解式鉴权功能
+        registry.addInterceptor(new SaInterceptor()).addPathPatterns("/**");
     }
 
     /**

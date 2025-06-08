@@ -1,5 +1,6 @@
 package com.matuto.boot.system.controller;
 
+import cn.dev33.satoken.annotation.SaIgnore;
 import com.matuto.boot.common.domain.AjaxResult;
 import com.matuto.boot.system.service.CaptchaService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -11,8 +12,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.imageio.ImageIO;
-import javax.servlet.ServletOutputStream;
-import javax.servlet.http.HttpServletResponse;
+import jakarta.servlet.ServletOutputStream;
+import jakarta.servlet.http.HttpServletResponse;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.UUID;
@@ -28,12 +29,7 @@ public class CaptchaController {
 
     private final CaptchaService captchaService;
 
-    @GetMapping("/get")
-    public AjaxResult getCaptcha() {
-        String uuid = UUID.randomUUID().toString();
-        return AjaxResult.success(captchaService.createCaptcha(uuid));
-    }
-
+    @SaIgnore
     @Operation(summary = "获取验证码")
     @GetMapping("/image")
     public void getCaptcha(@RequestParam(value = "uuid", required = false) String uuid, HttpServletResponse response) throws IOException {

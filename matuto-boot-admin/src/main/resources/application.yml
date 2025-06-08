@@ -93,5 +93,7 @@ sa-token:
   active-timeout: -1
   is-concurrent: true
   is-share: false
-  token-style: uuid
-  is-log: false 
+  token-style: jwt
+  jwt-secret-key: matuto-boot-jwt-secret-key-2024
+  is-log: false
+  token-prefix: Bearer

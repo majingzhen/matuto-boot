@@ -1,10 +1,10 @@
 package com.matuto.boot.system.service.impl;
 
-import com.aliyun.oss.ServiceException;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.matuto.boot.common.constant.UserConstants;
+import com.matuto.boot.common.exception.ServiceException;
 import com.matuto.boot.system.entity.SysRole;
 import com.matuto.boot.system.mapper.SysRoleMapper;
 import com.matuto.boot.system.mapper.SysUserRoleMapper;

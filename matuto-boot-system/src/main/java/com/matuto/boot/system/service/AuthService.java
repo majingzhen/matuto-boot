@@ -1,6 +1,7 @@
 package com.matuto.boot.system.service;
 
 import com.matuto.boot.system.domain.vo.LoginVO;
+import com.matuto.boot.system.entity.SysUser;
 
 public interface AuthService {
     /**
@@ -21,5 +22,5 @@ public interface AuthService {
      *
      * @return 用户信息
      */
-    Object getUserInfo();
+    SysUser getUserInfo();
 } 

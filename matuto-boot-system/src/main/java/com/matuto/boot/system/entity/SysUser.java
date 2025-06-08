@@ -1,5 +1,6 @@
 package com.matuto.boot.system.entity;
 
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.matuto.boot.common.domain.BaseEntity;
@@ -31,18 +32,21 @@ public class SysUser  extends BaseEntity implements Serializable {
      * 用户账号
      */
     @Schema(description = "用户账号")
+    @TableField("username")
     private String userName;
 
     /**
      * 用户昵称
      */
     @Schema(description = "用户昵称")
+    @TableField("nickname")
     private String nickName;
 
     /**
      * 用户类型（0系统用户 1会员用户）
      */
     @Schema(description = "用户类型（0系统用户 1会员用户）")
+    @TableField(exist = false)
     private String userType;
 
     /**
@@ -61,7 +65,7 @@ public class SysUser  extends BaseEntity implements Serializable {
      * 用户性别（0男 1女 2未知）
      */
     @Schema(description = "用户性别（0男 1女 2未知）")
-    private String sex;
+    private String gender;
 
     /**
      * 头像地址
@@ -86,12 +90,6 @@ public class SysUser  extends BaseEntity implements Serializable {
      */
     @Schema(description = "帐号状态（0正常 1停用）")
     private String status;
-
-    /**
-     * 删除标志（0代表存在 1代表删除）
-     */
-    @Schema(description = "删除标志（0代表存在 1代表删除）")
-    private String delFlag;
 
     /**
      * 最后登录IP

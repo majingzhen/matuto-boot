@@ -3,7 +3,7 @@
     <!-- 侧边栏 -->
     <div class="sidebar-container">
       <div class="logo">
-        <img src="@/assets/logo.png" alt="logo">
+        <img src="@/assets/icons/logo.svg" alt="logo">
         <span>Matuto Boot</span>
       </div>
       <el-menu

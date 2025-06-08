@@ -25,15 +25,9 @@ export default defineConfig({
     open: true,
     proxy: {
       // 开发环境代理配置
-      '/dev-api': {
-        target: 'http://localhost:8080',
-        changeOrigin: true,
-        rewrite: (path) => path.replace(/^\/dev-api/, '')
-      },
       '/api': {
         target: 'http://localhost:8080',
-        changeOrigin: true,
-        rewrite: (path) => path.replace(/^\/api/, '')
+        changeOrigin: true
       }
     }
   },

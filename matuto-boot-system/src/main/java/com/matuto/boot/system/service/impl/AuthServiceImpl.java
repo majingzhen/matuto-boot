@@ -1,7 +1,7 @@
 package com.matuto.boot.system.service.impl;
 
 import cn.dev33.satoken.stp.StpUtil;
-import com.aliyun.oss.ServiceException;
+import com.matuto.boot.common.exception.ServiceException;
 import com.matuto.boot.common.utils.SecurityUtils;
 import com.matuto.boot.system.domain.vo.LoginVO;
 import com.matuto.boot.system.entity.SysUser;

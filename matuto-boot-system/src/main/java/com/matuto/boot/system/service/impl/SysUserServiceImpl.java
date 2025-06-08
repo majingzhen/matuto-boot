@@ -1,9 +1,9 @@
 package com.matuto.boot.system.service.impl;
 
-import com.aliyun.oss.ServiceException;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.matuto.boot.common.exception.ServiceException;
 import com.matuto.boot.common.utils.PasswordUtils;
 import com.matuto.boot.common.utils.SecurityUtils;
 import com.matuto.boot.system.entity.SysUser;
@@ -32,7 +32,6 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
                 .like(StringUtils.hasText(user.getPhone()), SysUser::getPhone, user.getPhone())
                 .eq(StringUtils.hasText(user.getStatus()), SysUser::getStatus, user.getStatus())
                 .eq(StringUtils.hasText(user.getUserType()), SysUser::getUserType, user.getUserType())
-                .eq(SysUser::getDelFlag, "0")
                 .orderByDesc(SysUser::getCreateTime);
         return page(new Page<>(pageNum, pageSize), wrapper);
     }
@@ -58,7 +57,6 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         // 加密密码
         user.setPassword(PasswordUtils.encrypt(user.getPassword(), salt));
         // 设置默认值
-        user.setDelFlag("0");
         user.setStatus("0");
         // 保存用户
         save(user);
@@ -133,8 +131,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
     @Override
     public SysUser selectUserByUserName(String userName) {
         LambdaQueryWrapper<SysUser> wrapper = new LambdaQueryWrapper<>();
-        wrapper.eq(SysUser::getUserName, userName)
-                .eq(SysUser::getDelFlag, "0");
+        wrapper.eq(SysUser::getUserName, userName);
         return getOne(wrapper);
     }
 

@@ -13,8 +13,9 @@ export const useUserStore = defineStore('user', () => {
   async function loginAction(loginData) {
     try {
       const { data } = await login(loginData)
-      token.value = data.token
-      setToken(data.token)
+      console.log(data)
+      token.value = data
+      setToken(data)
       return Promise.resolve()
     } catch (error) {
       return Promise.reject(error)

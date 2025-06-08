@@ -48,7 +48,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(ServiceException.class)
     public AjaxResult handleServiceException(ServiceException e) {
         log.error(e.getMessage(), e);
-        return AjaxResult.error(e.getCode(), e.getMessage());
+        return AjaxResult.error(HttpStatus.ERROR, e.getMessage());
     }
 
     /**

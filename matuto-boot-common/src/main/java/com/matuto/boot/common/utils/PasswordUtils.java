@@ -43,4 +43,10 @@ public class PasswordUtils {
     public static boolean verify(String password, String salt, String encryptedPassword) {
         return encrypt(password, salt).equals(encryptedPassword);
     }
+
+    public static void main(String[] args) {
+        String salt = generateSalt();
+        System.out.println(salt);
+        System.out.println(encrypt("123456",salt));
+    }
 } 
