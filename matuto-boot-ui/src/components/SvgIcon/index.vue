@@ -1,29 +1,38 @@
 <template>
-  <el-icon :size="size" :color="color">
-    <component :is="name" />
-  </el-icon>
+  <svg :class="svgClass" aria-hidden="true">
+    <use :xlink:href="iconName" />
+  </svg>
 </template>
 
-<script setup lang="ts">
+<script setup>
 import { computed } from 'vue'
-import * as ElementPlusIconsVue from '@element-plus/icons-vue'
 
-const props = defineProps<{
-  name: string
-  size?: number | string
-  color?: string
-}>()
+const props = defineProps({
+  iconClass: {
+    type: String,
+    required: true
+  },
+  className: {
+    type: String,
+    default: ''
+  }
+})
 
-const icon = computed(() => {
-  return ElementPlusIconsVue[props.name as keyof typeof ElementPlusIconsVue]
+const iconName = computed(() => `#icon-${props.iconClass}`)
+const svgClass = computed(() => {
+  if (props.className) {
+    return 'svg-icon ' + props.className
+  }
+  return 'svg-icon'
 })
 </script>
 
-<style lang="scss" scoped>
-.el-icon {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  vertical-align: middle;
+<style scoped>
+.svg-icon {
+  width: 1em;
+  height: 1em;
+  vertical-align: -0.15em;
+  fill: currentColor;
+  overflow: hidden;
 }
 </style> 

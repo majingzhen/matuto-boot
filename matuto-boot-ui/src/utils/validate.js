@@ -146,7 +146,7 @@ export function isAlphanumericAndUnderscoreAndHyphenAndDot(str) {
  * @param str 字符串
  */
 export function isAlphanumericAndUnderscoreAndHyphenAndDotAndSpace(str) {
-  const reg = /^[a-zA-Z0-9_.- ]+$/
+  const reg = /^[a-zA-Z0-9_. -]+$/
   return reg.test(str)
 }
 
@@ -155,7 +155,7 @@ export function isAlphanumericAndUnderscoreAndHyphenAndDotAndSpace(str) {
  * @param str 字符串
  */
 export function isAlphanumericAndUnderscoreAndHyphenAndDotAndSpaceAndChinese(str) {
-  const reg = /^[a-zA-Z0-9_.- \u4e00-\u9fa5]+$/
+  const reg = /^[a-zA-Z0-9_. \u4e00-\u9fa5-]+$/
   return reg.test(str)
 }
 
@@ -164,6 +164,6 @@ export function isAlphanumericAndUnderscoreAndHyphenAndDotAndSpaceAndChinese(str
  * @param str 字符串
  */
 export function isAlphanumericAndUnderscoreAndHyphenAndDotAndSpaceAndChineseAndSpecial(str) {
-  const reg = /^[a-zA-Z0-9_.- \u4e00-\u9fa5!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]+$/
+  const reg = /^[a-zA-Z0-9_. \u4e00-\u9fa5!@#$%^&*()_+\[\]{}\\;:'"\|,.<>\/?-]+$/
   return reg.test(str)
-} 
+}

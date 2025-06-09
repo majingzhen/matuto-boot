@@ -12,7 +12,6 @@ import com.matuto.boot.system.mapper.SysRoleMenuMapper;
 import com.matuto.boot.system.service.SysMenuService;
 import com.matuto.boot.common.exception.ServiceException;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -103,7 +102,7 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
     @Override
     public List<SysMenu> buildMenuTree(List<SysMenu> menus) {
         List<SysMenu> returnList = new ArrayList<>();
-        List<Long> tempList = menus.stream().map(SysMenu::getMenuId).collect(Collectors.toList());
+        List<Long> tempList = menus.stream().map(SysMenu::getId).toList();
         for (SysMenu menu : menus) {
             // 如果是顶级节点, 遍历该父节点的所有子节点
             if (!tempList.contains(menu.getParentId())) {
@@ -129,6 +128,15 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
                 .eq(SysRoleMenu::getMenuId, menuId)) > 0;
     }
 
+    @Override
+    public List<SysMenu> selectMenusByUserId(Long id) {
+        // 管理员返回所有菜单信息
+        if (SecurityUtils.isAdmin(id)) {
+            return list();
+        }
+        // 根据用户id查询菜单
+        return baseMapper.selectMenusByUserId(id);
+    }
     /**
      * 递归列表
      */
@@ -148,7 +156,7 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
      */
     private List<SysMenu> getChildList(List<SysMenu> list, SysMenu t) {
         return list.stream()
-                .filter(n -> n.getParentId().equals(t.getMenuId()))
+                .filter(n -> n.getParentId().equals(t.getId()))
                 .collect(Collectors.toList());
     }
 

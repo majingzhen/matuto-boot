@@ -4,6 +4,7 @@ import cn.dev33.satoken.annotation.SaCheckLogin;
 import cn.dev33.satoken.annotation.SaIgnore;
 import com.matuto.boot.common.domain.AjaxResult;
 import com.matuto.boot.system.domain.vo.LoginVO;
+import com.matuto.boot.system.entity.SysUser;
 import com.matuto.boot.system.service.AuthService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;

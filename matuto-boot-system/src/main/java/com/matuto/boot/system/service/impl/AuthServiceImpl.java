@@ -3,13 +3,17 @@ package com.matuto.boot.system.service.impl;
 import cn.dev33.satoken.stp.StpUtil;
 import com.matuto.boot.common.exception.ServiceException;
 import com.matuto.boot.common.utils.SecurityUtils;
+import com.matuto.boot.system.domain.vo.LoginUserVO;
 import com.matuto.boot.system.domain.vo.LoginVO;
+import com.matuto.boot.system.entity.SysMenu;
+import com.matuto.boot.system.entity.SysRole;
 import com.matuto.boot.system.entity.SysUser;
-import com.matuto.boot.system.service.AuthService;
-import com.matuto.boot.system.service.CaptchaService;
-import com.matuto.boot.system.service.SysUserService;
+import com.matuto.boot.system.service.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
@@ -18,6 +22,10 @@ public class AuthServiceImpl implements AuthService {
     private final SysUserService userService;
     
     private final CaptchaService captchaService;
+
+    private final SysRoleService roleService;
+
+    private final SysMenuService menuService;
     
     @Override
     public String login(LoginVO loginVO) {
@@ -46,7 +54,14 @@ public class AuthServiceImpl implements AuthService {
     }
     
     @Override
-    public SysUser getUserInfo() {
-        return userService.getById(StpUtil.getLoginIdAsLong());
+    public LoginUserVO getUserInfo() {
+        SysUser sysUser = userService.getById(StpUtil.getLoginIdAsLong());
+        if (sysUser == null) {
+            throw new ServiceException("用户不存在");
+        }
+        List<SysRole> roles = roleService.selectRolesByUserId(sysUser.getId());
+        List<SysMenu> menus = menuService.selectMenusByUserId(sysUser.getId());
+        Set<String> permissions = menuService.getMenuPermsByUserId(sysUser.getId());
+        return LoginUserVO.build(sysUser, roles, menus, permissions);
     }
 } 

@@ -96,4 +96,11 @@ public interface SysMenuService extends IService<SysMenu> {
      * @return 结果
      */
     boolean checkMenuExistRole(Long menuId);
-} 
+
+    /**
+     * 根据用户ID查询菜单
+     * @param id 用户Id
+     * @return 菜单
+     */
+    List<SysMenu> selectMenusByUserId(Long id);
+}

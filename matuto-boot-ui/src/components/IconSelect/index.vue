@@ -1,99 +1,99 @@
 <template>
-  <div class="icon-body">
-    <el-input v-model="iconName" placeholder="请输入图标名称" clearable @clear="filterIcons" @input="filterIcons">
+  <div class="icon-select">
+    <el-input
+      v-model="iconName"
+      placeholder="请输入图标名称"
+      clearable
+      @clear="handleClear"
+    >
       <template #prefix>
         <el-icon><Search /></el-icon>
       </template>
     </el-input>
     <div class="icon-list">
-      <div v-for="(item, index) in iconList" :key="index" @click="selectedIcon(item)">
-        <el-icon :class="{ active: item === activeIcon }">
-          <component :is="item" />
+      <div
+        v-for="icon in filteredIcons"
+        :key="icon"
+        class="icon-item"
+        @click="handleSelect(icon)"
+      >
+        <el-icon>
+          <component :is="icon" />
         </el-icon>
-        <span>{{ item }}</span>
+        <span class="icon-name">{{ icon }}</span>
       </div>
     </div>
   </div>
 </template>
 
-<script lang="ts" setup>
+<script setup>
 import { ref, computed } from 'vue'
 import * as ElementPlusIconsVue from '@element-plus/icons-vue'
-import { Search } from '@element-plus/icons-vue'
 
 const props = defineProps({
-  activeIcon: {
+  modelValue: {
     type: String,
     default: ''
   }
 })
 
-const emit = defineEmits(['selected'])
+const emit = defineEmits(['update:modelValue'])
 
-const iconName = ref('')
-const allIcons = Object.keys(ElementPlusIconsVue)
+const iconName = ref(props.modelValue)
+const icons = Object.keys(ElementPlusIconsVue)
 
-const iconList = computed(() => {
-  if (!iconName.value) {
-    return allIcons
-  }
-  return allIcons.filter(name => name.toLowerCase().includes(iconName.value.toLowerCase()))
+const filteredIcons = computed(() => {
+  if (!iconName.value) return icons
+  return icons.filter(icon => 
+    icon.toLowerCase().includes(iconName.value.toLowerCase())
+  )
 })
 
-const filterIcons = () => {
-  // 图标过滤逻辑已通过计算属性实现
+const handleSelect = (icon) => {
+  iconName.value = icon
+  emit('update:modelValue', icon)
 }
 
-const selectedIcon = (name: string) => {
-  emit('selected', name)
-}
-
-const reset = () => {
+const handleClear = () => {
   iconName.value = ''
+  emit('update:modelValue', '')
 }
 </script>
 
-<style lang="scss" scoped>
-.icon-body {
+<style scoped>
+.icon-select {
   width: 100%;
+}
+
+.icon-list {
+  margin-top: 10px;
+  max-height: 300px;
+  overflow-y: auto;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+  gap: 10px;
   padding: 10px;
-  .icon-list {
-    height: 200px;
-    overflow-y: auto;
-    margin-top: 10px;
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
-    gap: 10px;
-    
-    div {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      height: 85px;
-      cursor: pointer;
-      border: 1px solid #eee;
-      border-radius: 4px;
-      transition: all 0.3s;
-      
-      &:hover {
-        background-color: #f5f7fa;
-      }
-      
-      .el-icon {
-        font-size: 24px;
-        margin-bottom: 8px;
-        
-        &.active {
-          color: var(--el-color-primary);
-        }
-      }
-      
-      span {
-        font-size: 12px;
-        color: #666;
-      }
-    }
-  }
+  border: 1px solid #dcdfe6;
+  border-radius: 4px;
+}
+
+.icon-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 10px;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: background-color 0.3s;
+}
+
+.icon-item:hover {
+  background-color: #f5f7fa;
+}
+
+.icon-name {
+  margin-top: 5px;
+  font-size: 12px;
+  color: #606266;
 }
 </style> 

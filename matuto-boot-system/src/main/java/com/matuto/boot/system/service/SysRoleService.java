@@ -153,4 +153,11 @@ public interface SysRoleService extends IService<SysRole> {
      * @return 选中角色ID列表
      */
     List<Long> selectRoleListByUserId(Long userId);
+
+    /**
+     * 通过用户ID查询角色
+     * @param userId 用户ID
+     * @return 角色列表
+     */
+    List<SysRole> selectRolesByUserId(Long userId);
 } 

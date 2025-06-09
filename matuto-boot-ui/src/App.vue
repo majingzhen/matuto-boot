@@ -2,7 +2,7 @@
   <router-view />
 </template>
 
-<script setup lang="ts">
+<script setup>
 // 组件逻辑
 </script>
 

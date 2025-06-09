@@ -8,7 +8,7 @@ import router from './router'
 import './router/permission'
 import './styles/index.scss'
 import permission from './directive/permission'
-import { setupComponents } from './components'
+import { setupComponents } from './components/index.js'
 
 const app = createApp(App)
 

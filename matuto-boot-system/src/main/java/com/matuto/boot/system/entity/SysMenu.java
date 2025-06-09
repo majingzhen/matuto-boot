@@ -19,7 +19,7 @@ public class SysMenu extends BaseEntity {
 
     @TableId(type = IdType.AUTO)
     @Schema(description = "菜单ID")
-    private Long menuId;
+    private Long id;
 
     @Schema(description = "菜单名称")
     private String menuName;

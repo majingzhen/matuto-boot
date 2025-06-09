@@ -37,4 +37,11 @@ public interface SysRoleMapper extends BaseMapper<SysRole> {
      */
     int insertRoleMenus(@Param("roleId") Long roleId, @Param("menuIds") List<Long> menuIds);
 
+    /**
+     * 根据用户ID查询角色
+     *
+     * @param userId 用户ID
+     * @return 角色列表
+     */
+    List<SysRole> selectRolesByUserId(Long userId);
 }
