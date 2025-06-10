@@ -39,8 +39,8 @@
         <div class="right">
           <el-dropdown trigger="click">
             <div class="avatar-wrapper">
-              <el-avatar :size="30" :src="userInfo.avatar" />
-              <span class="name">{{ userInfo.nickname }}</span>
+              <el-avatar :size="30" :src="userInfo?.avatar || ''" />
+              <span class="name">{{ userInfo?.nickName || '未登录' }}</span>
               <el-icon><CaretBottom /></el-icon>
             </div>
             <template #dropdown>
@@ -68,7 +68,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, ref } from 'vue'
+import { computed, ref, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useUserStore } from '@/stores/user'
 import { useMenuStore } from '@/stores/menu'
@@ -118,6 +118,16 @@ const handleLogout = () => {
     router.push('/login')
   })
 }
+
+// 获取用户信息
+onMounted(async () => {
+  try {
+    await userStore.getUserInfoAction()
+    await menuStore.getMenusAction()
+  } catch (error) {
+    console.error('获取用户信息失败:', error)
+  }
+})
 </script>
 
 <style lang="scss" scoped>

@@ -7,6 +7,7 @@ import NProgress from 'nprogress'
 import 'nprogress/nprogress.css'
 
 const whiteList = ['/login']
+let hasUserInfo = false
 
 router.beforeEach(async (to, from, next) => {
   NProgress.start()
@@ -21,12 +22,13 @@ router.beforeEach(async (to, from, next) => {
       const userStore = useUserStore()
       const menuStore = useMenuStore()
       
-      if (userStore.userInfo) {
+      if (userStore.userInfo || hasUserInfo) {
         next()
       } else {
         try {
           // 获取用户信息
           await userStore.getUserInfoAction()
+          hasUserInfo = true
           // 获取用户菜单
           const accessRoutes = await menuStore.getMenusAction()
           // 动态添加路由
@@ -37,6 +39,7 @@ router.beforeEach(async (to, from, next) => {
         } catch (error) {
           // 清除用户信息
           await userStore.logoutAction()
+          hasUserInfo = false
           ElMessage.error(error.message || '获取用户信息失败')
           next(`/login?redirect=${to.path}`)
           NProgress.done()

@@ -35,7 +35,7 @@ public class SecurityUtils {
      */
     public static Long getLoginUserId() {
         try {
-            return getLoginUser().getUserId();
+            return getLoginUser().getId();
         } catch (Exception e) {
             throw new ServiceException("获取用户ID异常");
         }

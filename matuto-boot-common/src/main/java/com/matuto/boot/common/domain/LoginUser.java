@@ -17,7 +17,7 @@ public class LoginUser implements Serializable {
     /**
      * 用户ID
      */
-    private Long userId;
+    private Long id;
 
     /**
      * 部门ID

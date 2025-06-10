@@ -101,8 +101,12 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
 
     @Override
     public List<SysMenu> buildMenuTree(List<SysMenu> menus) {
+        if (menus.isEmpty()) {
+            return new ArrayList<>();
+        }
         List<SysMenu> returnList = new ArrayList<>();
         List<Long> tempList = menus.stream().map(SysMenu::getId).toList();
+
         for (SysMenu menu : menus) {
             // 如果是顶级节点, 遍历该父节点的所有子节点
             if (!tempList.contains(menu.getParentId())) {
@@ -130,12 +134,15 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
 
     @Override
     public List<SysMenu> selectMenusByUserId(Long id) {
+        List<SysMenu> menus;
         // 管理员返回所有菜单信息
         if (SecurityUtils.isAdmin(id)) {
-            return list();
+            menus =  list();
+        } else {
+            // 根据用户id查询菜单
+            menus = baseMapper.selectMenusByUserId(id);
         }
-        // 根据用户id查询菜单
-        return baseMapper.selectMenusByUserId(id);
+        return buildMenuTree(menus);
     }
     /**
      * 递归列表

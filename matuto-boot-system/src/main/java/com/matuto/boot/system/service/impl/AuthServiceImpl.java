@@ -1,7 +1,10 @@
 package com.matuto.boot.system.service.impl;
 
 import cn.dev33.satoken.stp.StpUtil;
+import com.matuto.boot.common.constant.UserConstants;
+import com.matuto.boot.common.domain.LoginUser;
 import com.matuto.boot.common.exception.ServiceException;
+import com.matuto.boot.common.utils.PasswordUtils;
 import com.matuto.boot.common.utils.SecurityUtils;
 import com.matuto.boot.system.domain.vo.LoginUserVO;
 import com.matuto.boot.system.domain.vo.LoginVO;
@@ -31,20 +34,39 @@ public class AuthServiceImpl implements AuthService {
     public String login(LoginVO loginVO) {
         // 验证码校验
         captchaService.validate(loginVO.getUuid(), loginVO.getCaptcha());
-        
+
         // 用户验证
         SysUser user = userService.selectUserByUserName(loginVO.getUsername());
         if (user == null) {
-            throw new ServiceException("用户名或密码错误");
+            throw new ServiceException("登录用户不存在");
         }
-        
-        // 密码校验
-        if (!SecurityUtils.matchesPassword(loginVO.getPassword(),user.getSalt(), user.getPassword())) {
+        if (UserConstants.USER_DISABLE.equals(user.getStatus())) {
+            throw new ServiceException("用户已停用，请联系管理员");
+        }
+        // 密码验证
+        if (!PasswordUtils.verify(loginVO.getPassword(), user.getSalt(), user.getPassword())) {
             throw new ServiceException("用户名或密码错误");
         }
         
         // 生成token
         StpUtil.login(user.getId(), loginVO.getRememberMe() ? 7 * 24 * 60 * 60 : 2 * 60 * 60);
+
+        // 设置用户信息
+        // 生成token
+        StpUtil.login(user.getId());
+        // 设置用户信息
+        LoginUser loginUser = new LoginUser()
+                .setId(user.getId())
+                .setToken(StpUtil.getTokenValue())
+                .setLoginTime(System.currentTimeMillis())
+                .setExpireTime(StpUtil.getTokenTimeout() * 1000)
+                .setUser(user)
+                .setUserType(user.getUserType());
+        // 设置权限信息
+        Set<String> permissions = menuService.getMenuPermsByUserId(user.getId());
+        loginUser.setPermissions(permissions);
+        // 保存用户信息
+        StpUtil.getSession().set("loginUser", loginUser);
         return StpUtil.getTokenValue();
     }
     

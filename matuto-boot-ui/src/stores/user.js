@@ -13,7 +13,6 @@ export const useUserStore = defineStore('user', () => {
   async function loginAction(loginData) {
     try {
       const { data } = await login(loginData)
-      console.log(data)
       token.value = data
       setToken(data)
       return Promise.resolve()
@@ -41,6 +40,7 @@ export const useUserStore = defineStore('user', () => {
   async function getUserInfoAction() {
     try {
       const { data } = await getInfo()
+      console.log(data)
       userInfo.value = data
       return Promise.resolve(data)
     } catch (error) {

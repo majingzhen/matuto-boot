@@ -61,7 +61,7 @@ public class SysMenuController {
     }
 
     @Operation(summary = "获取用户菜单树")
-    @GetMapping("/user/tree")
+    @GetMapping("/user-menus")
     public AjaxResult getUserMenuTree() {
         return AjaxResult.success(menuService.getMenuTreeByUserId(SecurityUtils.getLoginUserId()));
     }

@@ -1,6 +1,8 @@
 package com.matuto.boot.system.service;
 
 import com.matuto.boot.common.domain.LoginUser;
+import com.matuto.boot.system.domain.vo.LoginUserVO;
+import com.matuto.boot.system.domain.vo.LoginVO;
 
 /**
  * 登录服务接口
@@ -9,13 +11,10 @@ public interface LoginService {
     /**
      * 登录
      *
-     * @param username 用户名
-     * @param password 密码
-     * @param code 验证码
-     * @param uuid 唯一标识
+     * @param loginVO 登录信息
      * @return 结果
      */
-    String login(String username, String password, String code, String uuid);
+    String login(LoginVO loginVO);
 
     /**
      * 获取用户信息

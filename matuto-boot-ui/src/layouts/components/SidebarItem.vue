@@ -28,21 +28,25 @@
   </div>
 </template>
 
-<script setup lang="ts">
+<script setup>
 import { ref } from 'vue'
 import { isExternal } from '@/utils/validate'
-import path from 'path-browserify'
-import type { AppRouteRecordRaw } from '@/types/route'
 
-const props = defineProps<{
-  item: AppRouteRecordRaw
-  basePath: string
-}>()
+const props = defineProps({
+  item: {
+    type: Object,
+    required: true
+  },
+  basePath: {
+    type: String,
+    default: ''
+  }
+})
 
-const onlyOneChild = ref<AppRouteRecordRaw>()
+const onlyOneChild = ref(null)
 
 // 判断是否只有一个子菜单
-const hasOneShowingChild = (children: AppRouteRecordRaw[] = [], parent: AppRouteRecordRaw) => {
+const hasOneShowingChild = (children = [], parent) => {
   if (!children) {
     children = []
   }
@@ -72,13 +76,14 @@ const hasOneShowingChild = (children: AppRouteRecordRaw[] = [], parent: AppRoute
 }
 
 // 解析路径
-const resolvePath = (routePath: string) => {
+const resolvePath = (routePath) => {
   if (isExternal(routePath)) {
     return routePath
   }
   if (isExternal(props.basePath)) {
     return props.basePath
   }
-  return path.resolve(props.basePath, routePath)
+  // 简单路径拼接
+  return props.basePath + '/' + routePath
 }
 </script> 

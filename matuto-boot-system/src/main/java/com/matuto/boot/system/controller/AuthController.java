@@ -6,15 +6,20 @@ import com.matuto.boot.common.domain.AjaxResult;
 import com.matuto.boot.system.domain.vo.LoginVO;
 import com.matuto.boot.system.entity.SysUser;
 import com.matuto.boot.system.service.AuthService;
+import com.matuto.boot.system.service.LoginService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/auth")
+@RequiredArgsConstructor
 public class AuthController {
     
-    @Autowired
-    private AuthService authService;
+    private final AuthService authService;
+
+    private final LoginService loginService;
+
 
     @SaIgnore
     @PostMapping("/login")
@@ -23,7 +28,7 @@ public class AuthController {
         return AjaxResult.success("登录成功",token);
     }
 
-    @SaCheckLogin
+    @SaIgnore
     @PostMapping("/logout")
     public AjaxResult logout() {
         authService.logout();
