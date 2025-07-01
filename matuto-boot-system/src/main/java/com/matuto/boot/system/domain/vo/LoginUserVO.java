@@ -36,13 +36,7 @@ public class LoginUserVO {
 
     private String userType;
 
-    private List<SysRole>  roles;
-
-    private List<SysMenu> menus;
-
-    private Set<String> permissions;
-
-    public static LoginUserVO build(SysUser sysUser, List<SysRole> roles, List<SysMenu> menus, Set<String> permissions) {
+    public static LoginUserVO build(SysUser sysUser) {
         LoginUserVO loginUserVO = new LoginUserVO();
         loginUserVO.setUserId(sysUser.getId());
         loginUserVO.setUserName(sysUser.getUserName());
@@ -53,9 +47,6 @@ public class LoginUserVO {
         loginUserVO.setGender(sysUser.getGender());
         loginUserVO.setStatus(sysUser.getStatus());
         loginUserVO.setUserType(sysUser.getUserType());
-        loginUserVO.setRoles(roles);
-        loginUserVO.setMenus(menus);
-        loginUserVO.setPermissions(permissions);
         return loginUserVO;
     }
 }

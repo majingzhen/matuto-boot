@@ -1,8 +1,11 @@
 package com.matuto.boot.system.service;
 
+import com.matuto.boot.system.domain.vo.LoginUserPerVO;
 import com.matuto.boot.system.domain.vo.LoginUserVO;
 import com.matuto.boot.system.domain.vo.LoginVO;
 import com.matuto.boot.system.entity.SysUser;
+
+import java.util.List;
 
 public interface AuthService {
     /**
@@ -24,4 +27,7 @@ public interface AuthService {
      * @return 用户信息
      */
     LoginUserVO getUserInfo();
-} 
+
+
+    LoginUserPerVO getUserPerms();
+}

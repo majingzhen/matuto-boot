@@ -97,3 +97,7 @@ sa-token:
   jwt-secret-key: matuto-boot-jwt-secret-key-2024
   is-log: false
   token-prefix: Bearer
+
+# 验证码
+captcha:
+  open: false

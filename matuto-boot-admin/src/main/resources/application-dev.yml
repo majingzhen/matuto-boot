@@ -19,3 +19,4 @@ logging:
   level:
     com.matuto.boot: debug
     org.springframework: warn
+

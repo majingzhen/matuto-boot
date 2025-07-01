@@ -1,6 +1,7 @@
 package com.matuto.boot.system.entity;
 
 import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
@@ -17,17 +18,17 @@ public class SysRole {
     /**
      * 角色名称
      */
-    private String name;
+    private String roleName;
     
     /**
      * 角色编码
      */
-    private String code;
+    private String roleKey;
     
     /**
      * 角色描述
      */
-    private String description;
+    private String remark;
     
     /**
      * 状态（0停用 1正常）
@@ -53,9 +54,4 @@ public class SysRole {
      * 更新者
      */
     private String updateBy;
-    
-    /**
-     * 备注
-     */
-    private String remark;
 } 

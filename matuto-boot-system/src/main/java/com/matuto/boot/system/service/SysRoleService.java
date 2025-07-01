@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import com.matuto.boot.system.entity.SysRole;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  * 角色服务接口
@@ -160,4 +161,11 @@ public interface SysRoleService extends IService<SysRole> {
      * @return 角色列表
      */
     List<SysRole> selectRolesByUserId(Long userId);
+
+    /**
+     * 通过用户ID查询角色
+     * @param userId 用户ID
+     * @return 角色列表
+     */
+    Set<String> selectRoleCodeByUserId(Long userId);
 } 

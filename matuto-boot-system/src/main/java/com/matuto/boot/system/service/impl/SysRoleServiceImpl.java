@@ -15,6 +15,8 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * 角色服务实现类
@@ -30,8 +32,8 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
     @Override
     public Page<SysRole> getRoleList(SysRole role, Integer pageNum, Integer pageSize) {
         LambdaQueryWrapper<SysRole> wrapper = new LambdaQueryWrapper<>();
-        wrapper.like(StringUtils.hasText(role.getName()), SysRole::getName, role.getName())
-                .like(StringUtils.hasText(role.getCode()), SysRole::getCode, role.getCode())
+        wrapper.like(StringUtils.hasText(role.getRoleName()), SysRole::getRoleName, role.getRoleName())
+                .like(StringUtils.hasText(role.getRoleKey()), SysRole::getRoleKey, role.getRoleKey())
                 .eq(StringUtils.hasText(String.valueOf(role.getStatus())), SysRole::getStatus, role.getStatus());
         return page(new Page<>(pageNum, pageSize), wrapper);
     }
@@ -48,11 +50,11 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
     public void addRole(SysRole role) {
         // 检查角色名称是否唯一
         if (checkRoleNameUnique(role)) {
-            throw new ServiceException("新增角色'" + role.getName() + "'失败，角色名称已存在");
+            throw new ServiceException("新增角色'" + role.getRoleName() + "'失败，角色名称已存在");
         }
         // 检查角色权限是否唯一
         if (checkRoleCodeUnique(role)) {
-            throw new ServiceException("新增角色'" + role.getName() + "'失败，角色权限已存在");
+            throw new ServiceException("新增角色'" + role.getRoleName() + "'失败，角色权限已存在");
         }
         // 设置默认值
         role.setStatus(Integer.valueOf(UserConstants.NORMAL));
@@ -70,11 +72,11 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
         }
         // 检查角色名称是否唯一
         if (checkRoleNameUnique(role)) {
-            throw new ServiceException("修改角色'" + role.getName() + "'失败，角色名称已存在");
+            throw new ServiceException("修改角色'" + role.getRoleName() + "'失败，角色名称已存在");
         }
         // 检查角色权限是否唯一
         if (checkRoleCodeUnique(role)) {
-            throw new ServiceException("修改角色'" + role.getName() + "'失败，角色权限已存在");
+            throw new ServiceException("修改角色'" + role.getRoleName() + "'失败，角色权限已存在");
         }
         // 更新角色
         updateById(role);
@@ -119,7 +121,7 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
     @Override
     public boolean checkRoleNameUnique(SysRole role) {
         LambdaQueryWrapper<SysRole> wrapper = new LambdaQueryWrapper<>();
-        wrapper.eq(SysRole::getName, role.getId())
+        wrapper.eq(SysRole::getRoleName, role.getId())
                 .ne(role.getId() != null, SysRole::getId, role.getId());
         return count(wrapper) > 0;
     }
@@ -127,7 +129,7 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
     @Override
     public boolean checkRoleCodeUnique(SysRole role) {
         LambdaQueryWrapper<SysRole> wrapper = new LambdaQueryWrapper<>();
-        wrapper.eq(SysRole::getCode, role.getCode())
+        wrapper.eq(SysRole::getRoleKey, role.getRoleKey())
                 .ne(role.getId() != null, SysRole::getId, role.getId());
         return count(wrapper) > 0;
     }
@@ -186,5 +188,14 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
     @Override
     public List<SysRole> selectRolesByUserId(Long userId) {
         return baseMapper.selectRolesByUserId(userId);
+    }
+
+    @Override
+    public Set<String> selectRoleCodeByUserId(Long userId) {
+        List<SysRole> sysRoles = baseMapper.selectRolesByUserId(userId);
+        if (sysRoles != null && !sysRoles.isEmpty()) {
+            return sysRoles.stream().map(SysRole::getRoleKey).collect(Collectors.toSet());
+        }
+        return Set.of();
     }
 } 

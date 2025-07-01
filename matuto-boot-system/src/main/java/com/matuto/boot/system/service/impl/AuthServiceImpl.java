@@ -6,21 +6,23 @@ import com.matuto.boot.common.domain.LoginUser;
 import com.matuto.boot.common.exception.ServiceException;
 import com.matuto.boot.common.utils.PasswordUtils;
 import com.matuto.boot.common.utils.SecurityUtils;
+import com.matuto.boot.system.domain.vo.LoginUserPerVO;
 import com.matuto.boot.system.domain.vo.LoginUserVO;
 import com.matuto.boot.system.domain.vo.LoginVO;
-import com.matuto.boot.system.entity.SysMenu;
-import com.matuto.boot.system.entity.SysRole;
 import com.matuto.boot.system.entity.SysUser;
 import com.matuto.boot.system.service.*;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
 public class AuthServiceImpl implements AuthService {
+
+    @Value("${captcha.open}")
+    private boolean openCaptcha;
 
     private final SysUserService userService;
     
@@ -32,8 +34,11 @@ public class AuthServiceImpl implements AuthService {
     
     @Override
     public String login(LoginVO loginVO) {
-        // 验证码校验
-        captchaService.validate(loginVO.getUuid(), loginVO.getCaptcha());
+
+        if (openCaptcha) {
+            // 验证码校验
+            captchaService.validate(loginVO.getUuid(), loginVO.getCaptcha());
+        }
 
         // 用户验证
         SysUser user = userService.selectUserByUserName(loginVO.getUsername());
@@ -62,9 +67,7 @@ public class AuthServiceImpl implements AuthService {
                 .setExpireTime(StpUtil.getTokenTimeout() * 1000)
                 .setUser(user)
                 .setUserType(user.getUserType());
-        // 设置权限信息
-        Set<String> permissions = menuService.getMenuPermsByUserId(user.getId());
-        loginUser.setPermissions(permissions);
+
         // 保存用户信息
         StpUtil.getSession().set("loginUser", loginUser);
         return StpUtil.getTokenValue();
@@ -81,9 +84,15 @@ public class AuthServiceImpl implements AuthService {
         if (sysUser == null) {
             throw new ServiceException("用户不存在");
         }
-        List<SysRole> roles = roleService.selectRolesByUserId(sysUser.getId());
-        List<SysMenu> menus = menuService.selectMenusByUserId(sysUser.getId());
-        Set<String> permissions = menuService.getMenuPermsByUserId(sysUser.getId());
-        return LoginUserVO.build(sysUser, roles, menus, permissions);
+        return LoginUserVO.build(sysUser);
+    }
+
+    @Override
+    public LoginUserPerVO getUserPerms() {
+        LoginUserPerVO loginUserPerVO = new LoginUserPerVO();
+        loginUserPerVO.setRole(roleService.selectRoleCodeByUserId(SecurityUtils.getLoginUserId()));
+        loginUserPerVO.setPermission(menuService.getMenuPermsByUserId(SecurityUtils.getLoginUserId()));
+        loginUserPerVO.setMenu(menuService.getMenuTreeByUserId(SecurityUtils.getLoginUserId()));
+        return loginUserPerVO;
     }
 } 
